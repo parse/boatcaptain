@@ -46,7 +46,7 @@ class Token
     if @type == @cargo
       s = s + "Symbol".ljust(tokenTypeLen, ".") + ":" + space + @type
     elsif @type == "Whitespace"
-      s = s + "Whitespace".ljust(tokenTypeLen, ".") + ":" + space + repr(@cargo)
+      s = s + "Whitespace".ljust(tokenTypeLen, ".") + ":" + space + @cargo.inspect
     else
       s = s + @type.ljust(tokenTypeLen, ".") + ":" + space + @cargo
     end

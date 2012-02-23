@@ -1,5 +1,5 @@
 # List of keywords
-KeyWords = ["if", "then", "else", "elif", "endif", "while", "loop", "endloop", "print", "return", "exit"]
+KeeyWords = ["if", "then", "else", "elif", "endif", "while", "loop", "endloop", "print", "return", "exit"]
 
 # A list of symbols that are one character long
 OneCharacterSymbols = ["=", "(", ")", "<", ">", "/", "*", "+", "-", "!", "&", ".", ";"]
