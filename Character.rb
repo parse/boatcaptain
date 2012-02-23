@@ -11,7 +11,7 @@
 #    line in sourceText where the error occurred.  
 
 class Character
-  attr_accessor :cargo, :ENDMARK
+  attr_accessor :cargo, :sourceText, :lineIndex, :colIndex, :ENDMARK
 
   def initialize(c, lineIndex, colIndex, sourceIndex, sourceText)
     @cargo          = c

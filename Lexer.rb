@@ -9,14 +9,15 @@ class Lexer
     @c1 = nil
     @c2 = nil
     @character = nil
+    @ENDMARK = "\0"        # aka "lowvalues"
 
     # Use the scanner to read the first character from the sourceText
     getChar()
   end
 
   def getChar()  
-    # Get the next character
 
+    # Get the next character
     @character = @scanner.get()
     @c1 = @character.cargo
 
@@ -32,7 +33,7 @@ class Lexer
     # Construct and return the next token in the sourceText.
 
     # Read past and ignore any whitespace characters or any comments -- START
-    while WHITESPACE_CHARS.include? @c1 or c2 == "/*" 
+    while WHITESPACE_CHARS.include? @c1 or @c2 == "/*" 
       
       # Process whitespace
       while WHITESPACE_CHARS.include? @c1
@@ -58,7 +59,7 @@ class Lexer
             getChar() # read past the second character of a 2-character token
 
             while not (@c2 == "*/")
-              if @c1 == ENDMARK
+              if @c1 == @ENDMARK
                 token.abort("Found end of file before end of comment")
               end
 
@@ -76,16 +77,14 @@ class Lexer
         # return token  # only if we want the lexer to return comments
       end
 
-      #--------------------------------------------------------------------------------
-      # read past and ignore any whitespace characters or any comments -- END
-      #--------------------------------------------------------------------------------
+      # Read past and ignore any whitespace characters or any comments -- END
 
-      # Create a new token.  The token will pick up
-      # its line and column information from the character.
-      token = Token.new(character)
+      # Create a new token.  The token will pick up its line and column information from the character.
+      token = Token.new(@character)
 
-      if @c1 == ENDMARK
+      if @c1 == @ENDMARK
         token.type = EOF
+
         return token
       end
 
@@ -118,8 +117,8 @@ class Lexer
       end
 
       if STRING_STARTCHARS.include? @c1
-        # remember the quoteChar (single or double quote)
-        # so we can look for the same character to terminate the quote.
+        # Remember the quoteChar (single or double quote)
+        # So we can look for the same character to terminate the quote.
         quoteChar = @c1
 
         getChar() 
@@ -136,25 +135,27 @@ class Lexer
         token.cargo += @c1      # append close quote to text
         getChar()          
         token.type = STRING
+
         return token
       end
 
       if TwoCharacterSymbols.include? @c2
         token.cargo = @c2
-        token.type  = token.cargo  # for symbols, the token type is same as the cargo
-        getChar() # read past the first  character of a 2-character token
-        getChar() # read past the second character of a 2-character token
+        token.type  = token.cargo  # For symbols, the token type is same as the cargo
+        getChar() # Read past the first  character of a 2-character token
+        getChar() # Read past the second character of a 2-character token
 
         return token
       end
 
       if OneCharacterSymbols.include? @c1
-        token.type  = token.cargo  # for symbols, the token type is same as the cargo
-        getChar() # read past the symbol
+        token.type = token.cargo  # For symbols, the token type is same as the cargo
+        getChar() # Read past the symbol
+
         return token
       end
 
-      # else.... We have encountered something that we don't recognize.
+      # We have encountered something that we don't recognize.
       token.abort("I found a character or symbol that I do not recognize: " + dq(c1))
     end
   end

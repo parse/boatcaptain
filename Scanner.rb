@@ -38,4 +38,22 @@ class Scanner
 
     return char
   end
+
+  def lookahead(offset=1)
+    # Return a string (not a Character object) containing the character
+    # at position:
+    #    sourceIndex + offset
+    # Note that we do NOT move our current position in the sourceText.
+    # That is,  we do NOT change the value of sourceIndex.
+  
+    index = @sourceIndex + offset
+
+    if index > @lastIndex
+      # We've read past the end of sourceText.
+      # Return the ENDMARK character.
+      return @ENDMARK
+    else
+      return @sourceText[index]
+    end
+  end
 end
