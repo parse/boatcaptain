@@ -1,4 +1,6 @@
 class Node
+  attr_accessor :level
+
   def initialize(token=nil)
     @token = token
     @level = 0
@@ -7,13 +9,13 @@ class Node
     
   def add(token)
     # Make a node out of a token and add it to self.children
-    addNode(  Node.new(token) )
+    addNode( Node.new(token) )
   end
         
   def addNode(node)
     # Add a node to self.children
     node.level = @level + 1
-    @children.append(node)
+    @children << node 
   end
         
   def to_s()

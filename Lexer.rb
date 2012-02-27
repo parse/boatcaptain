@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), 'Scanner')
+require File.join(File.dirname(__FILE__), 'Token')
 require File.join(File.dirname(__FILE__), 'nxxSymbols')
 
 class Lexer
