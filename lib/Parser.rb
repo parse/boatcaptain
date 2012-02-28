@@ -6,7 +6,6 @@ require File.join(File.dirname(__FILE__), 'nxxSymbols')
 require File.join(File.dirname(__FILE__), 'Node')
 
 class Parser
-  attr_accessor :ast
 
   def initialize(sourceText, verbose = false)
     @sourceText     = sourceText
@@ -20,6 +19,7 @@ class Parser
     parse()
   end
 
+  # Return AST Node Tree
   def getAST()
     return @ast
   end
@@ -77,7 +77,6 @@ class Parser
     # argTokenTypes should be a list of argTokenType
 
     for argTokenType in argTokenTypes
-      #print "foundOneOf", argTokenType, token.type
       if @token.type == argTokenType
         return true
       end
@@ -88,7 +87,6 @@ class Parser
 
   # Found
   def found(argTokenType)
-    #puts @token.type + " == " + argTokenType
     if @token.type == argTokenType
       return true
     end
@@ -111,8 +109,9 @@ class Parser
 
   # Program
   def program()
-    push("program")
     # program = statement {statement} EOF.
+
+    push("program")
     node = Node.new()
 
     statement(node)
@@ -128,11 +127,11 @@ class Parser
 
   # Statement
   def statement(node)
-    push("statement")
-
     # statement = printStatement | assignmentStatement .
     # assignmentStatement = variable "=" expression ";".
     # printStatement      = "print" expression ";".
+
+    push("statement")
 
     if found("print")
       printStatement(node)
@@ -145,13 +144,13 @@ class Parser
 
   # Expression
   def expression(node)
-    push("expression")
-
     # expression = stringExpression | numberExpression.
     # "||" is the concatenation operator, as in PL/I 
     # stringExpression =  (stringLiteral | variable) {"||"            stringExpression}.
     # numberExpression =  (numberLiteral | variable) { numberOperator numberExpression}.
     # numberOperator = "+" | "-" | "/" | "*" .
+    
+    push("expression")
 
     if found(WHITESPACE) or found(COMMENT)
       getToken()
@@ -194,8 +193,10 @@ class Parser
 
   # AssignmentStatement
   def assignmentStatement(node)
-    push("assignmentStatement")
     #assignmentStatement = variable "=" expression ";".
+    
+    push("assignmentStatement")
+
     identifierNode = Node.new(@token)
     consume(IDENTIFIER)
 
@@ -212,8 +213,10 @@ class Parser
 
   # printStatement
   def printStatement(node)
-    push("printStatement")
     # printStatement      = "print" expression ";".
+
+    push("printStatement")
+
     statementNode = Node.new(@token)
     consume("print")
 
@@ -227,9 +230,10 @@ class Parser
 
   # stringExpression
   def stringExpression(node)
-    push("stringExpression")
-    # /* "||" is the concatenation operator, as in PL/I */
+    # "||" is the concatenation operator, as in PL/I 
     #stringExpression =  (stringLiteral | variable) {"||" stringExpression}.
+
+    push("stringExpression")
 
     if found(STRING)
       node.add(@token)
@@ -253,9 +257,11 @@ class Parser
 
   # numberExpression
   def numberExpression(node)
-    push("numberExpression")
     # numberExpression =  (numberLiteral | variable) { numberOperator numberExpression}.
     # numberOperator = "+" | "-" | "/" | "*" .
+
+    push("numberExpression")
+
     if found(NUMBER)
       numberLiteral(node)
     else
@@ -269,12 +275,6 @@ class Parser
       numberExpression(node)
     end
     pop("numberExpression")
-  end
-
-  # commentLiteral
-  def commentLiteral(node)
-    node.add(@token)
-    getToken()
   end
 
   # stringLiteral

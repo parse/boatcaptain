@@ -11,9 +11,10 @@ nxx is a simple programming language that provides:
 comments may be enclosed in slash+asterisk .. asterisk+slash
 */
 alpha = 16 ;
-beta = 2   ;
+beta = 2 ;
 resultName = "delta" ;
 delta = alpha / beta ;
 print "Value of " || resultName || " is: " ;
+print resultName ;
 print delta ;
 print "\n" ;
