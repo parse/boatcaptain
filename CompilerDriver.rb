@@ -14,8 +14,9 @@ sourceText 	= get_file_as_string('nxx1.txt')
 parser 		= Parser.new(sourceText, false)
 
 puts "~"*40
-puts "Here is the abstract syntax tree:"
+puts "Here is the generated output:"
 puts "~"*40
 
-ast = parser.getAST()
-puts ast.to_s
+ast 		= parser.getAST()
+compiler 	= Compiler.new(ast)
+puts compiler.generateOutput()

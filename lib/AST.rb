@@ -17,10 +17,6 @@ class AST
     node.level = @level + 1
     @children << node 
   end
-  
-  def compile()
-    
-  end
 
   def to_s()
     s = "    " * @level
