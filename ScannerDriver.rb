@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'Scanner')
+require File.join(File.dirname(__FILE__), 'lib/Scanner')
 
 def get_file_as_string(filename)
   data = ''

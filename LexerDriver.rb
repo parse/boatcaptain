@@ -1,5 +1,5 @@
-require File.join(File.dirname(__FILE__), 'Lexer')
-require File.join(File.dirname(__FILE__), 'Token')
+require File.join(File.dirname(__FILE__), 'lib/Lexer')
+require File.join(File.dirname(__FILE__), 'lib/Token')
 
 def get_file_as_string(filename)
   data = ''

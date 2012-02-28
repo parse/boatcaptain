@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'Parser')
+require File.join(File.dirname(__FILE__), 'lib/Parser')
 
 def get_file_as_string(filename)
   data = ''
