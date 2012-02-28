@@ -6,4 +6,4 @@ Based off the works by Steven Ferg <http://www.ferg.org/> and his examples in Py
 Work in progress.
 
 #### Examples
-So far, look in <https://github.com/parse/boatcaptain/blob/master/LexerDriverOutput.txt> and <https://github.com/parse/boatcaptain/blob/master/ScannerDriverOutput.txt> for example output created.
+So far, look in <https://github.com/parse/boatcaptain/blob/master/output/LexerDriverOutput.txt>, <https://github.com/parse/boatcaptain/blob/master/output/ParserDriverOutput.txt> and <https://github.com/parse/boatcaptain/blob/master/output/ScannerDriverOutput.txt> for example output.
