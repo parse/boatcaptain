@@ -1,5 +1,5 @@
 class Node
-  attr_accessor :level
+  attr_accessor :level, :to_s
 
   def initialize(token=nil)
     @token = token
@@ -28,7 +28,7 @@ class Node
     end
             
     for child in @children
-      s += child.toString()
+      s += child.to_s
     end
     
     return s

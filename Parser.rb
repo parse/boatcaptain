@@ -6,6 +6,7 @@ require File.join(File.dirname(__FILE__), 'nxxSymbols')
 require File.join(File.dirname(__FILE__), 'Node')
 
 class Parser
+  attr_accessor :ast
 
   def initialize(sourceText, verbose = false)
     @sourceText     = sourceText
@@ -15,9 +16,11 @@ class Parser
     @indent         = 0
     @numberOperator = ["+","-","/","*"]
     @lexer          = Lexer.new(sourceText)
-
+    
     parse()
+  end
 
+  def getAST()
     return @ast
   end
 
@@ -32,7 +35,7 @@ class Parser
       puts "~"*40
     end
 
-    return @ast
+    #return @ast
   end
 
   def getToken()
@@ -40,27 +43,25 @@ class Parser
       if @token
         # print the current token, before we get the next one
         # print (" "*40 ) + token.show() 
-        puts(("  "*@indent) + "   (" + @token.show(align=False) + ")")
+        puts(("  "*@indent) + "   (" + @token.show(false) + ")")
       end
     end
 
     @token  = @lexer.get()
   end
 
-
   # Push and pop
   def push(s)
     @indent += 1
 
     if @verbose
-      print(("  "*indent) + " " + s)
+      print(("  "*@indent) + " " + s)
     end
   end
 
   def pop(s)
     if @verbose
-      #print(("  "*indent) + " " + s + ".end")
-      pass
+      print(("  "*@indent) + " " + s + ".end")
     end
 
     @indent -= 1
@@ -87,6 +88,7 @@ class Parser
 
   # Found
   def found(argTokenType)
+    #puts @token.type + " == " + argTokenType
     if @token.type == argTokenType
       return true
     end
@@ -107,46 +109,27 @@ class Parser
     end
   end
 
-  # Decorator track0
-  def track0(func)
-    def newfunc()
-      push(func.__name__) 
-      func()
-      pop(func.__name__)
-    end
-
-    return newfunc
-  end
-      
-  # Decorator track
-  def track(func)
-    def newfunc(node)
-      push(func.__name__)
-      func(node)
-      pop(func.__name__)
-    end
-
-    return newfunc
-  end
-
   # Program
-  @track0
   def program()
+    push("program")
     # program = statement {statement} EOF.
     node = Node.new()
 
     statement(node)
-
     while not found(EOF)
       statement(node)
     end
+
     consume(EOF)
+
     @ast = node
+    pop("program")
   end
 
   # Statement
-  @track
   def statement(node)
+    push("statement")
+
     # statement = printStatement | assignmentStatement .
     # assignmentStatement = variable "=" expression ";".
     # printStatement      = "print" expression ";".
@@ -156,18 +139,24 @@ class Parser
     else
       assignmentStatement(node)
     end
+
+    pop("statement")
   end
 
   # Expression
-  @track
   def expression(node)
+    push("expression")
+
     # expression = stringExpression | numberExpression.
     # "||" is the concatenation operator, as in PL/I 
     # stringExpression =  (stringLiteral | variable) {"||"            stringExpression}.
     # numberExpression =  (numberLiteral | variable) { numberOperator numberExpression}.
     # numberOperator = "+" | "-" | "/" | "*" .
 
-    if found(STRING)
+    if found(WHITESPACE) or found(COMMENT)
+      getToken()
+
+    elsif found(STRING)
       stringLiteral(node)
 
       while found("||")
@@ -200,11 +189,12 @@ class Parser
         end
       end
     end
+    pop("expression")
   end
 
   # AssignmentStatement
-  @track
   def assignmentStatement(node)
+    push("assignmentStatement")
     #assignmentStatement = variable "=" expression ";".
     identifierNode = Node.new(@token)
     consume(IDENTIFIER)
@@ -217,11 +207,12 @@ class Parser
 
     expression(operatorNode)
     consume(";")
+    pop("assignmentStatement")
   end
 
   # printStatement
-  @track
   def printStatement(node)
+    push("printStatement")
     # printStatement      = "print" expression ";".
     statementNode = Node.new(@token)
     consume("print")
@@ -231,11 +222,12 @@ class Parser
     expression(statementNode)
 
     consume(";")
+    pop("printStatement")
   end
 
   # stringExpression
-  @track
   def stringExpression(node)
+    push("stringExpression")
     # /* "||" is the concatenation operator, as in PL/I */
     #stringExpression =  (stringLiteral | variable) {"||" stringExpression}.
 
@@ -256,11 +248,12 @@ class Parser
       getToken() 
       stringExpression(node)
     end
+    pop("stringExpression")
   end
 
   # numberExpression
-  @track
   def numberExpression(node)
+    push("numberExpression")
     # numberExpression =  (numberLiteral | variable) { numberOperator numberExpression}.
     # numberOperator = "+" | "-" | "/" | "*" .
     if found(NUMBER)
@@ -270,11 +263,18 @@ class Parser
       consume(IDENTIFIER)
     end
 
-    while foundOneOf(numberOperator)
+    while foundOneOf(@numberOperator)
       node.add(@token)
       getToken()
       numberExpression(node)
     end
+    pop("numberExpression")
+  end
+
+  # commentLiteral
+  def commentLiteral(node)
+    node.add(@token)
+    getToken()
   end
 
   # stringLiteral
