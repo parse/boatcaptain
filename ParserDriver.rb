@@ -18,3 +18,5 @@ puts "~"*40
 
 ast = parser.getAST()
 puts ast.to_s
+
+puts ast.compile()

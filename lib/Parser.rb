@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'Lexer')
 require File.join(File.dirname(__FILE__), 'nxxSymbols')
-require File.join(File.dirname(__FILE__), 'Node')
+require File.join(File.dirname(__FILE__), 'AST')
 
 # A recursive descent parser for nxx
 class Parser
@@ -106,7 +106,7 @@ class Parser
     # program = statement {statement} EOF.
 
     push("program")
-    node = Node.new()
+    node = AST.new()
 
     statement(node)
     while not found(EOF)
@@ -153,8 +153,8 @@ class Parser
       stringLiteral(node)
 
       while found("||")
-          getToken()
-          stringExpression(node)
+        getToken()
+        stringExpression(node)
       end
 
     elsif found(NUMBER)
@@ -193,10 +193,10 @@ class Parser
     
     push("assignmentStatement")
 
-    identifierNode = Node.new(@token)
+    identifierNode = AST.new(@token)
     consume(IDENTIFIER)
 
-    operatorNode = Node.new(@token)
+    operatorNode = AST.new(@token)
     consume("=")
     node.addNode(operatorNode)
 
@@ -213,7 +213,7 @@ class Parser
 
     push("printStatement")
 
-    statementNode = Node.new(@token)
+    statementNode = AST.new(@token)
     consume("print")
 
     node.addNode(statementNode)
@@ -229,9 +229,8 @@ class Parser
     # "||" is the concatenation operator, as in PL/I 
     #stringExpression =  (stringLiteral | variable) {"||" stringExpression}.
 
-    push("stringExpression")
-
     if found(STRING)
+
       node.add(@token)
       getToken()
 

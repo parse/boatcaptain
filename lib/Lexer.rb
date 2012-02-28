@@ -76,7 +76,7 @@ class Lexer
         getChar() # read past the first  character of a 2-character token
         getChar() # read past the second character of a 2-character token
       
-        return token
+        #return token # Don't return comment tokens
       end
     end
 

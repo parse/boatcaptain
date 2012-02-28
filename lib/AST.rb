@@ -1,4 +1,4 @@
-class Node
+class AST
   attr_accessor :level, :to_s
 
   def initialize(token=nil)
@@ -9,7 +9,7 @@ class Node
     
   def add(token)
     # Make a node out of a token and add it to self.children
-    addNode( Node.new(token) )
+    addNode( AST.new(token) )
   end
         
   def addNode(node)
@@ -17,7 +17,11 @@ class Node
     node.level = @level + 1
     @children << node 
   end
-        
+  
+  def compile()
+    
+  end
+
   def to_s()
     s = "    " * @level
         
