@@ -15,6 +15,5 @@ beta = 2 ;
 resultName = "delta" ;
 delta = alpha / beta ;
 print "Value of " || resultName || " is: " ;
-print resultName ;
 print delta ;
 print "\n" ;

@@ -11,10 +11,10 @@ end
 
 sourceText = get_file_as_string('nxx1.txt')
 parser = Parser.new(sourceText, false)
-ast = parser.getAST()
 
 puts "~"*40
 puts "Here is the abstract syntax tree:"
 puts "~"*40
 
+ast = parser.getAST()
 puts ast.to_s

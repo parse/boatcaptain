@@ -1,10 +1,8 @@
-# A recursive descent parser for nxx1, 
-# as defined in nxx1ebnf.txt
-
 require File.join(File.dirname(__FILE__), 'Lexer')
 require File.join(File.dirname(__FILE__), 'nxxSymbols')
 require File.join(File.dirname(__FILE__), 'Node')
 
+# A recursive descent parser for nxx
 class Parser
 
   def initialize(sourceText, verbose = false)
@@ -19,11 +17,6 @@ class Parser
     parse()
   end
 
-  # Return AST Node Tree
-  def getAST()
-    return @ast
-  end
-
   # Parse
   def parse()
     getToken()
@@ -34,15 +27,17 @@ class Parser
       puts "Successful parse!"
       puts "~"*40
     end
-
-    #return @ast
   end
 
+  # Return AST Node Tree
+  def getAST()
+    return @ast
+  end
+
+  # Print current token and get the next one
   def getToken()
     if @verbose
       if @token
-        # print the current token, before we get the next one
-        # print (" "*40 ) + token.show() 
         puts(("  "*@indent) + "   (" + @token.show(false) + ")")
       end
     end
@@ -50,7 +45,6 @@ class Parser
     @token  = @lexer.get()
   end
 
-  # Push and pop
   def push(s)
     @indent += 1
 
@@ -171,6 +165,7 @@ class Parser
         getToken()
         numberExpression(node)
       end
+
     else
       node.add(@token)
       consume(IDENTIFIER)
@@ -188,12 +183,13 @@ class Parser
         end
       end
     end
+
     pop("expression")
   end
 
   # AssignmentStatement
   def assignmentStatement(node)
-    #assignmentStatement = variable "=" expression ";".
+    # assignmentStatement = variable "=" expression ";".
     
     push("assignmentStatement")
 
