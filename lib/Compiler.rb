@@ -1,7 +1,7 @@
 class Compiler
   def initialize(ast)
     @ast = ast
-  end
+  end 
 
   def generateOutput()
     @ast.inspect
