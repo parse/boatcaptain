@@ -24,18 +24,9 @@ class Token
   end
   
   #  Return a displayable string representation of the token
-  def show (showLineNumbers = false, *args)
-    # align=True shows token type left justified with dot leaders.
-    # Specify align=False to turn this feature OFF.        
-    align = false #args.get("align", true)
-# TODO: FIX
-    if align
-      tokenTypeLen = 12
-      space = " "
-    else
-      tokenTypeLen = 0
-      space = ""
-    end      
+  def show (showLineNumbers = false)
+    tokenTypeLen = 0
+    space = ""
       
     if showLineNumbers
       s = @lineIndex.to_s.rjust(6) + @colIndex.to_s.rjust(4) + "  "
@@ -51,7 +42,7 @@ class Token
       s = s + @type.ljust(tokenTypeLen, ".") + ":" + space + @cargo
     end
 
-    return s
+    s
   end
   
   def abort (msg)

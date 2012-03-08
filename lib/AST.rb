@@ -1,5 +1,5 @@
 class AST
-  attr_accessor :level, :to_s
+  attr_accessor :level, :to_s, :children
 
   def initialize(token=nil)
     @token = token

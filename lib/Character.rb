@@ -36,7 +36,6 @@ class Character
       cargo = "   eof"
     end 
 
-    return @lineIndex.to_s.rjust(6) + @colIndex.to_s.rjust(4) + "  " + cargo
-
+    @lineIndex.to_s.rjust(6) + @colIndex.to_s.rjust(4) + "  " + cargo
   end 
 end

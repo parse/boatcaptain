@@ -38,7 +38,7 @@ class Parser
   def getToken()
     if @verbose
       if @token
-        puts(("  "*@indent) + "   (" + @token.show(false) + ")")
+        puts(("  "*@indent) + "   (" + @token.show(true) + ")")
       end
     end
 
@@ -49,16 +49,19 @@ class Parser
     @indent += 1
 
     if @verbose
-      print(("  "*@indent) + " " + s)
+      puts( ("  "*@indent) + " " + s)
     end
   end
 
   def pop(s)
     if @verbose
-      print(("  "*@indent) + " " + s + ".end")
+      puts ( ("  "*@indent) + " " + s + ".end")
     end
 
-    @indent -= 1
+    if (@indent > 0)
+      @indent -= 1
+    end
+
   end
 
   # Error passing

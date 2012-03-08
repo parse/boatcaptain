@@ -11,12 +11,13 @@ def get_file_as_string(filename)
 end
 
 sourceText 	= get_file_as_string('nxx1.txt')
-parser 		= Parser.new(sourceText, false)
+parser 		= Parser.new(sourceText, true)
 
 puts "~"*40
 puts "Here is the generated output:"
 puts "~"*40
 
 ast 		= parser.getAST()
-compiler 	= Compiler.new(ast)
-puts compiler.generateOutput()
+puts ast.children.inspect
+#compiler 	= Compiler.new(ast)
+#puts compiler.generateOutput()
